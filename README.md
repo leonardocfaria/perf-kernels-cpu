@@ -52,8 +52,8 @@ Full table: [results/bench.md](results/bench.md).
 
 ## Analysis
 - **Loop order is the first 10×.** Naive ijk walks B down a column, so every element costs a new cache line. The reduction into one scalar also can't be vectorised without `-ffast-math`, because float addition order matters. ikj makes the inner loop `c[j] += a * b[j]` over contiguous rows, which both compilers vectorise with AVX-512: 2-3 → 24-29 GFLOP/s at n=512.
-- **Cache size decides when tiling matters.** At n=512 (1 MB per matrix) ikj already runs from L2/L3. At n=2048 (16 MB per matrix) ikj drops to 12 GFLOP/s, streaming B from memory once per row of A. Tiling (64×64 blocks, 48 KB working set) keeps blocks in cache. Its real payoff here is that it creates independent row bands to parallelise: 4 threads give 54 GFLOP/s, a 4.2× speed-up over 1-thread tiled, nearly linear.
-- **BLAS is still 7× faster** (371 vs 54 GFLOP/s at 4 threads; 190 vs 13 at 1 thread, about 15× there). Our best kernel sits at ~13 % of the compute roof. BLAS additionally:
+- **Cache size decides when tiling matters.** At n=512 (1 MB per matrix) ikj already runs from L2/L3. At n=2048 (16 MB per matrix) ikj drops to 12 GFLOP/s, streaming B from memory once per row of A. Tiling (64×64 blocks, 48 KB working set) keeps blocks in cache. Its real payoff here is that it creates independent row bands to parallelise: 4 threads give 54 GFLOP/s, a 4.0× speed-up over 1-thread tiled (13.3), i.e. linear.
+- **BLAS is still 7× faster** (371 vs 54 GFLOP/s at 4 threads; 190 vs 13.3 at 1 thread, 14× there). Our best kernel sits at ~13 % of the compute roof. BLAS additionally:
   - packs A and B panels into contiguous buffers;
   - keeps a register-blocked micro-kernel (e.g. 16×6 outputs in registers, FMA every cycle, so each loaded value is reused about 6-16×);
   - tunes block sizes to L1/L2/L3.
