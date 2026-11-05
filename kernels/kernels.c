@@ -13,8 +13,8 @@ void matmul_naive(const float *A, const float *B, float *C, int M, int N, int K)
     for (int i = 0; i < M; i++)
         for (int j = 0; j < N; j++) {
             float s = 0;
-            for (int k = 0; k < K; k++) s += A[i * K + k] * B[k * N + j];
-            C[i * N + j] = s;
+            for (int k = 0; k < K; k++) s += A[(size_t)i * K + k] * B[(size_t)k * N + j];
+            C[(size_t)i * N + j] = s;
         }
 }
 
@@ -23,7 +23,7 @@ void matmul_ikj(const float *A, const float *B, float *C, int M, int N, int K) {
     memset(C, 0, sizeof(float) * (size_t)M * N);
     for (int i = 0; i < M; i++)
         for (int k = 0; k < K; k++) {
-            const float a = A[i * K + k];
+            const float a = A[(size_t)i * K + k];
             const float *b = B + (size_t)k * N;
             float *c = C + (size_t)i * N;
             for (int j = 0; j < N; j++) c[j] += a * b[j];
@@ -41,7 +41,7 @@ void matmul_tiled(const float *A, const float *B, float *C, int M, int N, int K)
                     je = j0 + TILE < N ? j0 + TILE : N;
                 for (int i = i0; i < ie; i++)
                     for (int k = k0; k < ke; k++) {
-                        const float a = A[i * K + k];
+                        const float a = A[(size_t)i * K + k];
                         const float *b = B + (size_t)k * N;
                         float *c = C + (size_t)i * N;
                         for (int j = j0; j < je; j++) c[j] += a * b[j];
@@ -74,7 +74,7 @@ void attention(const float *Q, const float *K, const float *V, float *O, int n, 
         for (int t = 0; t < dv; t++) acc[t] = 0;
         for (int j = 0; j < m; j++) {
             float s = 0;
-            for (int t = 0; t < d; t++) s += Q[i * d + t] * K[j * d + t];
+            for (int t = 0; t < d; t++) s += Q[(size_t)i * d + t] * K[(size_t)j * d + t];
             s *= scale;
             if (s > mx) {
                 const float corr = expf(mx - s);
@@ -84,7 +84,7 @@ void attention(const float *Q, const float *K, const float *V, float *O, int n, 
             }
             const float p = expf(s - mx);
             l += p;
-            for (int t = 0; t < dv; t++) acc[t] += p * V[j * dv + t];
+            for (int t = 0; t < dv; t++) acc[t] += p * V[(size_t)j * dv + t];
         }
         for (int t = 0; t < dv; t++) acc[t] /= l;
     }

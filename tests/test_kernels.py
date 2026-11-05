@@ -37,6 +37,15 @@ def test_attention(name, n, m, d, dv):
     np.testing.assert_allclose(ATTENTIONS[name](Q, K, V), ref.attention(Q, K, V), rtol=1e-4, atol=1e-5)
 
 
+def test_c_wrappers_reject_bad_shapes():
+    with pytest.raises(ValueError):
+        ckernels.matmul_ikj(r32(4, 10), r32(3, 5))
+    with pytest.raises(ValueError):
+        ckernels.softmax(r32(2, 3, 4))
+    with pytest.raises(ValueError):
+        ckernels.attention(r32(4, 8), r32(5, 7), r32(5, 8))
+
+
 def test_quick_bench_writes_table_and_roofline(tmp_path):
     import bench
 

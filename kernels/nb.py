@@ -6,6 +6,8 @@ import numpy as np
 from numba import prange
 
 TILE = 64  # 3 float32 tiles of 64x64 = 48 KB: fits L2 comfortably
+# fast-math without nnan/ninf: attention starts its running max at -inf and relies on exp(-inf) = 0
+FAST = {"contract", "afn", "reassoc", "nsz", "arcp"}
 
 
 @numba.njit(cache=True)
@@ -55,7 +57,7 @@ def matmul_tiled(A, B):
     return C
 
 
-@numba.njit(parallel=True, cache=True, fastmath=True)
+@numba.njit(parallel=True, cache=True, fastmath=FAST)
 def softmax(X):
     R, Cn = X.shape
     Y = np.empty_like(X)
@@ -74,7 +76,7 @@ def softmax(X):
     return Y
 
 
-@numba.njit(parallel=True, cache=True, fastmath=True)
+@numba.njit(parallel=True, cache=True, fastmath=FAST)
 def attention(Q, K, V):
     """Online softmax per query row: running max m, running sum l, running output acc. Never stores n x m."""
     n, d = Q.shape

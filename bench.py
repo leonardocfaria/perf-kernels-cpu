@@ -42,10 +42,11 @@ def run_one(threads: int, quick: bool) -> list[dict]:
     # machine roofs: practical peak (large sgemm) and memory bandwidth (a = b + c on 64 MB arrays)
     n = 256 if quick else 2048
     A, B = r32(n, n), r32(n, n)
-    add("roof", "BLAS sgemm (peak)", n, timeit(ref.matmul, A, B), 2 * n**3, 12 * n * n)
-    m = 1 << (16 if quick else 24)
+    add("roof", "BLAS sgemm (peak)", n, timeit(ref.matmul, A, B, reps=10), 2 * n**3, 12 * n * n)
+    m = 1 << (16 if quick else 25)  # 3 x 128 MB: beyond the VM's cache, so mostly DRAM bandwidth
     b, c, a = r32(m), r32(m), np.empty(m, np.float32)
-    add("roof", "stream add (bandwidth)", m, timeit(nb_stream_add(numba), a, b, c), m, 12 * m)
+    # 16 B/elem: read b, read c, write a + the write-allocate read of a's cache line
+    add("roof", "stream add (bandwidth)", m, timeit(nb_stream_add(numba), a, b, c), m, 16 * m)
 
     for n, impls in ((128 if quick else 512, "all"), (256 if quick else 2048, "fast")):
         A, B = r32(n, n), r32(n, n)
