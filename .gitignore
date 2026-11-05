@@ -1,0 +1,5 @@
+kernels/_build/
+results/*
+!results/bench.md
+!results/bench.json
+!results/roofline.png
