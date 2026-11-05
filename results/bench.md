@@ -1,42 +1,42 @@
 | kernel | impl | size | threads | ms | GFLOP/s | AI (FLOP/B) |
 |---|---|---|---|---|---|---|
-| roof | stream add (bandwidth) | 16777216 | 1 | 11.48 | 1.5 | 0.08 |
-| roof | stream add (bandwidth) | 16777216 | 4 | 3.00 | 5.6 | 0.08 |
-| roof | BLAS sgemm (peak) | 2048 | 1 | 132.89 | 129.3 | 341.33 |
-| roof | BLAS sgemm (peak) | 2048 | 4 | 43.18 | 397.9 | 341.33 |
-| attention | C online | n=2048,d=64 | 1 | 131.15 | 8.2 | 512.00 |
-| attention | C online | n=2048,d=64 | 4 | 34.64 | 31.0 | 512.00 |
-| attention | numba online | n=2048,d=64 | 1 | 211.34 | 5.1 | 512.00 |
-| attention | numba online | n=2048,d=64 | 4 | 49.42 | 21.7 | 512.00 |
-| attention | numpy (materialised) | n=2048,d=64 | 1 | 28.77 | 37.3 | 512.00 |
-| attention | numpy (materialised) | n=2048,d=64 | 4 | 19.05 | 56.4 | 512.00 |
-| matmul | C ikj | 2048 | 1 | 1337.78 | 12.8 | 341.33 |
-| matmul | C ikj | 2048 | 4 | 1368.60 | 12.6 | 341.33 |
-| matmul | C tiled+omp | 2048 | 1 | 1295.75 | 13.3 | 341.33 |
-| matmul | C tiled+omp | 2048 | 4 | 319.40 | 53.8 | 341.33 |
-| matmul | numba ikj | 2048 | 1 | 1438.83 | 11.9 | 341.33 |
-| matmul | numba ikj | 2048 | 4 | 1500.51 | 11.4 | 341.33 |
-| matmul | numba tiled+par | 2048 | 1 | 1421.61 | 12.1 | 341.33 |
-| matmul | numba tiled+par | 2048 | 4 | 367.54 | 46.7 | 341.33 |
-| matmul | numpy/BLAS | 2048 | 1 | 90.49 | 189.9 | 341.33 |
-| matmul | numpy/BLAS | 2048 | 4 | 46.36 | 370.5 | 341.33 |
-| matmul | C ikj | 512 | 1 | 11.12 | 24.1 | 85.33 |
-| matmul | C ikj | 512 | 4 | 15.02 | 17.9 | 85.33 |
-| matmul | C naive | 512 | 1 | 97.20 | 2.8 | 85.33 |
-| matmul | C naive | 512 | 4 | 165.95 | 1.6 | 85.33 |
-| matmul | C tiled+omp | 512 | 1 | 14.25 | 18.8 | 85.33 |
-| matmul | C tiled+omp | 512 | 4 | 6.45 | 41.6 | 85.33 |
-| matmul | numba ikj | 512 | 1 | 9.34 | 28.7 | 85.33 |
-| matmul | numba ikj | 512 | 4 | 14.38 | 18.7 | 85.33 |
-| matmul | numba naive | 512 | 1 | 130.65 | 2.1 | 85.33 |
-| matmul | numba naive | 512 | 4 | 149.96 | 1.8 | 85.33 |
-| matmul | numba tiled+par | 512 | 1 | 12.50 | 21.5 | 85.33 |
-| matmul | numba tiled+par | 512 | 4 | 8.38 | 32.0 | 85.33 |
-| matmul | numpy/BLAS | 512 | 1 | 2.31 | 116.0 | 85.33 |
-| matmul | numpy/BLAS | 512 | 4 | 0.75 | 357.7 | 85.33 |
-| softmax | C fused | 4096x1024 | 1 | 17.08 | 1.2 | 0.62 |
-| softmax | C fused | 4096x1024 | 4 | 4.31 | 4.9 | 0.62 |
-| softmax | numba fused | 4096x1024 | 1 | 16.77 | 1.3 | 0.62 |
-| softmax | numba fused | 4096x1024 | 4 | 4.32 | 4.8 | 0.62 |
-| softmax | numpy | 4096x1024 | 1 | 13.03 | 1.6 | 0.62 |
-| softmax | numpy | 4096x1024 | 4 | 12.75 | 1.6 | 0.62 |
+| roof | BLAS sgemm (peak) | 2048 | 1 | 104.03 | 165.2 | 341.33 |
+| roof | BLAS sgemm (peak) | 2048 | 4 | 28.06 | 612.2 | 341.33 |
+| roof | stream add (bandwidth) | 33554432 | 1 | 24.02 | 1.4 | 0.06 |
+| roof | stream add (bandwidth) | 33554432 | 4 | 8.28 | 4.1 | 0.06 |
+| attention | C online | n=2048,d=64 | 1 | 122.92 | 8.7 | 512.00 |
+| attention | C online | n=2048,d=64 | 4 | 30.80 | 34.9 | 512.00 |
+| attention | numba online | n=2048,d=64 | 1 | 170.37 | 6.3 | 512.00 |
+| attention | numba online | n=2048,d=64 | 4 | 40.88 | 26.3 | 512.00 |
+| attention | numpy (materialised) | n=2048,d=64 | 1 | 24.38 | 44.0 | 512.00 |
+| attention | numpy (materialised) | n=2048,d=64 | 4 | 18.71 | 57.4 | 512.00 |
+| matmul | C ikj | 2048 | 1 | 1844.31 | 9.3 | 341.33 |
+| matmul | C ikj | 2048 | 4 | 1504.29 | 11.4 | 341.33 |
+| matmul | C tiled+omp | 2048 | 1 | 1059.90 | 16.2 | 341.33 |
+| matmul | C tiled+omp | 2048 | 4 | 250.47 | 68.6 | 341.33 |
+| matmul | numba ikj | 2048 | 1 | 1227.81 | 14.0 | 341.33 |
+| matmul | numba ikj | 2048 | 4 | 1442.70 | 11.9 | 341.33 |
+| matmul | numba tiled+par | 2048 | 1 | 1052.22 | 16.3 | 341.33 |
+| matmul | numba tiled+par | 2048 | 4 | 262.41 | 65.5 | 341.33 |
+| matmul | numpy/BLAS | 2048 | 1 | 102.24 | 168.0 | 341.33 |
+| matmul | numpy/BLAS | 2048 | 4 | 27.74 | 619.3 | 341.33 |
+| matmul | C ikj | 512 | 1 | 12.06 | 22.3 | 85.33 |
+| matmul | C ikj | 512 | 4 | 10.93 | 24.6 | 85.33 |
+| matmul | C naive | 512 | 1 | 107.12 | 2.5 | 85.33 |
+| matmul | C naive | 512 | 4 | 108.84 | 2.5 | 85.33 |
+| matmul | C tiled+omp | 512 | 1 | 15.51 | 17.3 | 85.33 |
+| matmul | C tiled+omp | 512 | 4 | 3.53 | 76.0 | 85.33 |
+| matmul | numba ikj | 512 | 1 | 10.02 | 26.8 | 85.33 |
+| matmul | numba ikj | 512 | 4 | 10.43 | 25.7 | 85.33 |
+| matmul | numba naive | 512 | 1 | 113.86 | 2.4 | 85.33 |
+| matmul | numba naive | 512 | 4 | 112.26 | 2.4 | 85.33 |
+| matmul | numba tiled+par | 512 | 1 | 16.03 | 16.7 | 85.33 |
+| matmul | numba tiled+par | 512 | 4 | 3.59 | 74.7 | 85.33 |
+| matmul | numpy/BLAS | 512 | 1 | 1.78 | 151.2 | 85.33 |
+| matmul | numpy/BLAS | 512 | 4 | 0.63 | 427.4 | 85.33 |
+| softmax | C fused | 4096x1024 | 1 | 14.41 | 1.5 | 0.62 |
+| softmax | C fused | 4096x1024 | 4 | 3.64 | 5.8 | 0.62 |
+| softmax | numba fused | 4096x1024 | 1 | 13.93 | 1.5 | 0.62 |
+| softmax | numba fused | 4096x1024 | 4 | 3.60 | 5.8 | 0.62 |
+| softmax | numpy | 4096x1024 | 1 | 10.71 | 2.0 | 0.62 |
+| softmax | numpy | 4096x1024 | 4 | 12.21 | 1.7 | 0.62 |
